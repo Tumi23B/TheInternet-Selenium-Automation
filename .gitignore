@@ -1,0 +1,19 @@
+# Maven
+target/
+
+# Generated screenshots
+screenshots/*
+!screenshots/.gitkeep
+
+# Generated reports
+reports/*
+!reports/.gitkeep
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db

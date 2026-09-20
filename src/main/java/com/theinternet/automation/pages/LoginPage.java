@@ -1,6 +1,7 @@
 package com.theinternet.automation.pages;
 
 import com.theinternet.automation.base.BasePage;
+import com.theinternet.automation.config.ConfigurationManager;
 import org.openqa.selenium.By;
 
 /**
@@ -60,4 +61,10 @@ public class LoginPage extends BasePage {
     public void logout() {
         driver.findElement(logoutLink).click();
     }
+
+  public void open() {
+    driver.get(
+            ConfigurationManager.getConfig("login.url")
+    );
+}
 }

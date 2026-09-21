@@ -1,16 +1,16 @@
 package com.theinternet.automation.base;
 
-import com.theinternet.automation.config.ConfigurationManager;
 import com.theinternet.automation.driver.DriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 /**
- * Provides the common browser setup and cleanup used by all tests.
+ * Provides the common browser lifecycle used by all tests.
  *
- * Individual test classes extend this class so they do not need to
- * duplicate WebDriver initialization, navigation, or shutdown logic.
+ * BaseTest is responsible only for starting and stopping WebDriver.
+ * Individual page objects are responsible for navigating to their
+ * required application pages.
  */
 public abstract class BaseTest {
 
@@ -19,8 +19,8 @@ public abstract class BaseTest {
     /**
      * Starts a fresh browser session before each test.
      *
-     * Using a new browser session for every test keeps tests isolated
-     * and prevents one test's state from affecting another.
+     * Each test receives its own browser session so that cookies,
+     * authentication state, and page state cannot leak between tests.
      */
     @BeforeMethod
     public void setUp() {
@@ -28,17 +28,13 @@ public abstract class BaseTest {
         DriverFactory.initializeDriver();
 
         driver = DriverFactory.getDriver();
-
-        driver.get(
-                ConfigurationManager.getConfig("base.url")
-        );
     }
 
     /**
      * Closes the browser after each test.
      *
-     * DriverFactory owns the actual shutdown logic so browser lifecycle
-     * remains centralized in one place.
+     * DriverFactory owns the actual shutdown logic so WebDriver
+     * lifecycle remains centralized.
      */
     @AfterMethod
     public void tearDown() {

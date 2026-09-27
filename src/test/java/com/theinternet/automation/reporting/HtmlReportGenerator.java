@@ -2,6 +2,7 @@ package com.theinternet.automation.reporting;
 
 import com.theinternet.automation.constants.FrameworkConstants;
 
+import java.awt.Desktop;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,11 +57,72 @@ public class HtmlReportGenerator {
                             + reportPath.toAbsolutePath()
             );
 
+            openReportInBrowser(reportPath);
+
         } catch (IOException exception) {
 
             throw new RuntimeException(
                     "Unable to generate HTML execution report.",
                     exception
+            );
+        }
+    }
+
+    /**
+     * Opens the generated HTML report using the system's default browser.
+     *
+     * Browser opening is treated as an optional convenience feature.
+     * Failure to open the report must never cause the test execution
+     * itself to fail.
+     *
+     * @param reportPath path to the generated HTML report
+     */
+    private void openReportInBrowser(
+            Path reportPath) {
+
+        try {
+
+            if (!Desktop.isDesktopSupported()) {
+
+                System.out.println(
+                        "Desktop browsing is not supported. "
+                                + "The HTML report can be opened manually at: "
+                                + reportPath.toAbsolutePath()
+                );
+
+                return;
+            }
+
+            Desktop desktop =
+                    Desktop.getDesktop();
+
+            if (!desktop.isSupported(
+                    Desktop.Action.BROWSE
+            )) {
+
+                System.out.println(
+                        "Browser launching is not supported. "
+                                + "The HTML report can be opened manually at: "
+                                + reportPath.toAbsolutePath()
+                );
+
+                return;
+            }
+
+            desktop.browse(
+                    reportPath.toUri()
+            );
+
+            System.out.println(
+                    "HTML report opened in the default browser."
+            );
+
+        } catch (Exception exception) {
+
+            System.out.println(
+                    "Unable to automatically open the HTML report. "
+                            + "Open it manually at: "
+                            + reportPath.toAbsolutePath()
             );
         }
     }

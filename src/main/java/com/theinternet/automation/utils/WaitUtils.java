@@ -1,5 +1,5 @@
 package com.theinternet.automation.utils;
-
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import com.theinternet.automation.config.ConfigurationManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -108,5 +108,16 @@ public static WebElement waitForDisabled(
         WebElement element = webDriver.findElement(locator);
         return !element.isEnabled() ? element : null;
     });
+}
+/**
+ * Waits until the specified frame is available and switches into it.
+ */
+public static void waitForFrameAndSwitch(
+        WebDriver driver,
+        By locator) {
+
+    createWait(driver).until(
+            ExpectedConditions.frameToBeAvailableAndSwitchToIt(locator)
+    );
 }
 }

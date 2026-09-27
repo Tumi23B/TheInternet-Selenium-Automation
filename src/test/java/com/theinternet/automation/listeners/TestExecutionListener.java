@@ -1,6 +1,8 @@
 package com.theinternet.automation.listeners;
 
 import com.theinternet.automation.driver.DriverFactory;
+import com.theinternet.automation.reporting.HtmlReportGenerator;
+import com.theinternet.automation.reporting.TestExecutionSummary;
 import com.theinternet.automation.reporting.TestResult;
 import com.theinternet.automation.utils.ScreenshotUtils;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +10,7 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -16,11 +19,11 @@ import java.util.List;
 /**
  * Listens to TestNG test execution events.
  *
- * The listener centrally collects execution information so individual
- * test classes remain focused on functional verification.
+ * The listener centrally collects execution information, captures
+ * screenshots, and generates the final HTML execution report.
  *
- * Test results are stored in memory and will later be passed to the
- * HTML report generator.
+ * Individual test classes therefore remain focused on functional
+ * verification rather than reporting responsibilities.
  */
 public class TestExecutionListener implements ITestListener {
 
@@ -34,6 +37,8 @@ public class TestExecutionListener implements ITestListener {
 
     private String suiteStartDateTime;
 
+    private String executionDate;
+
     @Override
     public void onStart(ITestContext context) {
 
@@ -45,6 +50,10 @@ public class TestExecutionListener implements ITestListener {
         suiteStartDateTime =
                 LocalDateTime.now()
                         .format(DATE_TIME_FORMATTER);
+
+        executionDate =
+                LocalDate.now()
+                        .toString();
 
         System.out.println(
                 "=============================================="
@@ -105,14 +114,17 @@ public class TestExecutionListener implements ITestListener {
         long duration =
                 suiteEndTime - suiteStartTime;
 
+        String suiteEndDateTime =
+                LocalDateTime.now()
+                        .format(DATE_TIME_FORMATTER);
+
         System.out.println(
                 "=============================================="
         );
 
         System.out.println(
                 "Test execution finished: "
-                        + LocalDateTime.now()
-                        .format(DATE_TIME_FORMATTER)
+                        + suiteEndDateTime
         );
 
         System.out.println(
@@ -124,6 +136,30 @@ public class TestExecutionListener implements ITestListener {
         System.out.println(
                 "Recorded test results: "
                         + TEST_RESULTS.size()
+        );
+
+        System.out.println(
+                "Generating HTML report..."
+        );
+
+        TestExecutionSummary summary =
+                new TestExecutionSummary(
+                        executionDate,
+                        suiteStartDateTime,
+                        suiteEndDateTime,
+                        duration,
+                        TEST_RESULTS
+                );
+
+        HtmlReportGenerator reportGenerator =
+                new HtmlReportGenerator();
+
+        reportGenerator.generateReport(
+                summary
+        );
+
+        System.out.println(
+                "HTML report generation completed."
         );
 
         System.out.println(
@@ -265,7 +301,7 @@ public class TestExecutionListener implements ITestListener {
     }
 
     /**
-     * Converts milliseconds into a readable date/time value.
+     * Converts milliseconds into a formatted date/time value.
      */
     private String formatDateTime(
             long timestamp) {
@@ -281,7 +317,7 @@ public class TestExecutionListener implements ITestListener {
     /**
      * Provides access to the collected test results.
      *
-     * @return list containing the current execution results.
+     * @return copy of the current execution results.
      */
     public static List<TestResult> getTestResults() {
 

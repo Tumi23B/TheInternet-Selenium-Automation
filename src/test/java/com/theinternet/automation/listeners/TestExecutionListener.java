@@ -202,6 +202,9 @@ public class TestExecutionListener implements ITestListener {
         String failureMessage =
                 extractFailureMessage(result);
 
+        String executionDetails =
+                extractExecutionDetails(result);
+
         String testClassName =
                 result.getTestClass()
                         .getRealClass()
@@ -220,6 +223,7 @@ public class TestExecutionListener implements ITestListener {
                         endDateTime,
                         duration,
                         failureMessage,
+                        executionDetails,
                         screenshotBase64
                 );
 
@@ -298,6 +302,28 @@ public class TestExecutionListener implements ITestListener {
 
         return result.getThrowable()
                 .toString();
+    }
+
+    /**
+     * Extracts optional test-specific execution details.
+     *
+     * Test methods can attach useful findings to the TestNG result,
+     * such as dynamically identified table users or calculated values.
+     *
+     * @param result TestNG execution result.
+     * @return execution details or empty string.
+     */
+    private String extractExecutionDetails(
+            ITestResult result) {
+
+        Object executionDetails =
+                result.getAttribute("executionDetails");
+
+        if (executionDetails == null) {
+            return "";
+        }
+
+        return executionDetails.toString();
     }
 
     /**

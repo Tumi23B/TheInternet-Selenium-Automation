@@ -14,7 +14,8 @@ import java.util.List;
  * Generates a self-contained HTML report from a completed test execution.
  *
  * The report includes suite-level execution information, test statistics,
- * individual test results, failure messages, and embedded screenshots.
+ * individual test results, execution-specific findings, failure messages,
+ * and embedded screenshots.
  */
 public class HtmlReportGenerator {
 
@@ -158,9 +159,13 @@ public class HtmlReportGenerator {
                     <meta charset="UTF-8">
                     <meta name="viewport"
                           content="width=device-width, initial-scale=1.0">
-                    <title>The Internet - Selenium Automation Report</title>
+
+                    <title>
+                        The Internet - Selenium Automation Report
+                    </title>
 
                     <style>
+
                         * {
                             box-sizing: border-box;
                         }
@@ -168,87 +173,143 @@ public class HtmlReportGenerator {
                         body {
                             margin: 0;
                             padding: 0;
-                            font-family: Arial, Helvetica, sans-serif;
-                            background: #f4f6f8;
-                            color: #1f2933;
+                            font-family:
+                                Arial,
+                                Helvetica,
+                                sans-serif;
+                            background: #f1f5f9;
+                            color: #172033;
+                            line-height: 1.5;
                         }
 
                         .container {
                             width: 92%;
-                            max-width: 1400px;
-                            margin: 40px auto;
+                            max-width: 1450px;
+                            margin: 35px auto 60px;
                         }
+
+                        /* ================================
+                           REPORT HEADER
+                           ================================ */
 
                         .header {
                             background: #ffffff;
-                            border-radius: 10px;
-                            padding: 30px;
-                            margin-bottom: 25px;
-                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                            border: 1px solid #e2e8f0;
+                            border-radius: 14px;
+                            padding: 32px;
+                            margin-bottom: 24px;
+                            box-shadow:
+                                0 4px 16px
+                                rgba(15, 23, 42, 0.06);
                         }
 
                         .header h1 {
-                            margin: 0 0 10px 0;
+                            margin: 0 0 18px;
                             font-size: 30px;
+                            line-height: 1.2;
+                            color: #0f172a;
                         }
 
                         .header p {
-                            margin: 6px 0;
-                            color: #52606d;
+                            margin: 7px 0;
+                            color: #475569;
+                            font-size: 14px;
                         }
+
+                        .header strong {
+                            color: #1e293b;
+                        }
+
+                        /* ================================
+                           SUMMARY CARDS
+                           ================================ */
 
                         .summary-grid {
                             display: grid;
                             grid-template-columns:
-                                repeat(auto-fit, minmax(180px, 1fr));
+                                repeat(
+                                    auto-fit,
+                                    minmax(180px, 1fr)
+                                );
                             gap: 15px;
-                            margin-bottom: 25px;
+                            margin-bottom: 28px;
                         }
 
                         .summary-card {
                             background: #ffffff;
-                            border-radius: 10px;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 12px;
                             padding: 22px;
                             box-shadow:
-                                0 2px 8px rgba(0, 0, 0, 0.08);
+                                0 3px 12px
+                                rgba(15, 23, 42, 0.05);
                         }
 
                         .summary-card h3 {
-                            margin: 0 0 8px 0;
-                            font-size: 14px;
-                            color: #52606d;
+                            margin: 0 0 8px;
+                            font-size: 12px;
+                            color: #64748b;
                             text-transform: uppercase;
-                            letter-spacing: 0.5px;
+                            letter-spacing: 0.7px;
                         }
 
                         .summary-card .value {
-                            font-size: 30px;
-                            font-weight: bold;
+                            font-size: 29px;
+                            font-weight: 700;
+                            color: #0f172a;
                         }
+
+                        /* ================================
+                           TEST SECTION
+                           ================================ */
 
                         .test-section {
                             background: #ffffff;
-                            border-radius: 10px;
-                            padding: 25px;
-                            margin-bottom: 20px;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 14px;
+                            padding: 26px;
+                            margin-bottom: 22px;
                             box-shadow:
-                                0 2px 8px rgba(0, 0, 0, 0.08);
+                                0 4px 16px
+                                rgba(15, 23, 42, 0.05);
                         }
 
-                        .test-section h2 {
-                            margin-top: 0;
+                        .section-heading {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            gap: 15px;
+                            margin-bottom: 10px;
                         }
+
+                        .section-heading h2 {
+                            margin: 0;
+                            color: #0f172a;
+                            font-size: 21px;
+                        }
+
+                        .section-description {
+                            margin: 0 0 18px;
+                            color: #64748b;
+                            font-size: 14px;
+                        }
+
+                        /* ================================
+                           TEST CARD
+                           ================================ */
 
                         .test-card {
-                            border: 1px solid #d9e2ec;
-                            border-radius: 8px;
-                            margin-top: 15px;
+                            border: 1px solid #dbe3ec;
+                            border-radius: 11px;
+                            margin-top: 18px;
                             overflow: hidden;
+                            background: #ffffff;
                         }
 
                         .test-card-header {
-                            padding: 15px 18px;
+                            padding: 17px 20px;
                             background: #f8fafc;
+                            border-bottom: 1px solid #e2e8f0;
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
@@ -256,21 +317,28 @@ public class HtmlReportGenerator {
                         }
 
                         .test-name {
-                            font-weight: bold;
+                            font-weight: 700;
+                            color: #172033;
                             word-break: break-word;
                         }
 
+                        /* ================================
+                           STATUS BADGES
+                           ================================ */
+
                         .status {
                             display: inline-block;
-                            padding: 5px 10px;
-                            border-radius: 20px;
-                            font-size: 12px;
-                            font-weight: bold;
+                            padding: 6px 12px;
+                            border-radius: 999px;
+                            font-size: 11px;
+                            font-weight: 700;
+                            letter-spacing: 0.5px;
+                            white-space: nowrap;
                         }
 
                         .passed {
-                            background: #d1fae5;
-                            color: #065f46;
+                            background: #dcfce7;
+                            color: #166534;
                         }
 
                         .failed {
@@ -283,43 +351,132 @@ public class HtmlReportGenerator {
                             color: #92400e;
                         }
 
+                        /* ================================
+                           TEST DETAILS
+                           ================================ */
+
                         .test-details {
-                            padding: 18px;
+                            padding: 20px;
                         }
 
                         .detail-grid {
                             display: grid;
                             grid-template-columns:
-                                repeat(auto-fit, minmax(220px, 1fr));
+                                repeat(
+                                    auto-fit,
+                                    minmax(210px, 1fr)
+                                );
                             gap: 12px;
                             margin-bottom: 20px;
                         }
 
                         .detail-item {
                             background: #f8fafc;
-                            padding: 12px;
-                            border-radius: 6px;
+                            border: 1px solid #e2e8f0;
+                            padding: 13px;
+                            border-radius: 8px;
                         }
 
                         .detail-label {
                             display: block;
-                            font-size: 12px;
-                            color: #52606d;
-                            margin-bottom: 5px;
-                            font-weight: bold;
+                            font-size: 11px;
+                            color: #64748b;
+                            margin-bottom: 4px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 0.4px;
                         }
+
+                        /* ================================
+                           EXECUTION ANALYSIS
+                           ================================ */
+
+                        .analysis {
+                            margin: 20px 0;
+                            border: 1px solid #bfdbfe;
+                            border-radius: 10px;
+                            background: #eff6ff;
+                            overflow: hidden;
+                        }
+
+                        .analysis-header {
+                            padding: 14px 17px;
+                            background: #dbeafe;
+                            border-bottom: 1px solid #bfdbfe;
+                            font-weight: 700;
+                            color: #1e3a8a;
+                            font-size: 14px;
+                        }
+
+                        .analysis-body {
+                            padding: 17px;
+                        }
+
+                        .analysis-title {
+                            margin: 0 0 8px;
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: #475569;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                        }
+
+                        .analysis-amount {
+                            display: inline-block;
+                            margin-bottom: 16px;
+                            font-size: 25px;
+                            font-weight: 700;
+                            color: #0f172a;
+                        }
+
+                        .user-list {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 8px;
+                        }
+
+                        .user-item {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            padding: 10px 12px;
+                            background: #ffffff;
+                            border: 1px solid #dbeafe;
+                            border-radius: 8px;
+                            font-weight: 600;
+                            color: #1e293b;
+                        }
+
+                        .user-marker {
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 25px;
+                            height: 25px;
+                            border-radius: 50%;
+                            background: #2563eb;
+                            color: #ffffff;
+                            font-size: 12px;
+                            font-weight: 700;
+                            flex-shrink: 0;
+                        }
+
+                        /* ================================
+                           FAILURE INFORMATION
+                           ================================ */
 
                         .failure {
                             background: #fff5f5;
                             border: 1px solid #fecaca;
-                            border-radius: 6px;
-                            padding: 15px;
+                            border-radius: 9px;
+                            padding: 16px;
                             margin-bottom: 20px;
                         }
 
                         .failure strong {
                             display: block;
                             margin-bottom: 8px;
+                            color: #991b1b;
                         }
 
                         .failure-message {
@@ -327,43 +484,90 @@ public class HtmlReportGenerator {
                             word-break: break-word;
                             font-family: Consolas, monospace;
                             font-size: 13px;
+                            color: #7f1d1d;
                         }
 
+                        /* ================================
+                           SCREENSHOT
+                           ================================ */
+
                         .screenshot-container {
-                            margin-top: 15px;
+                            margin-top: 20px;
+                        }
+
+                        .screenshot-heading {
+                            margin-bottom: 10px;
+                            font-size: 13px;
+                            font-weight: 700;
+                            color: #475569;
                         }
 
                         .screenshot-container img {
                             display: block;
                             width: 100%;
-                            max-width: 1000px;
+                            max-width: 1100px;
                             height: auto;
-                            border: 1px solid #d9e2ec;
-                            border-radius: 6px;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 9px;
+                            box-shadow:
+                                0 3px 10px
+                                rgba(15, 23, 42, 0.06);
                         }
 
                         .no-screenshot {
                             padding: 15px;
                             background: #f8fafc;
-                            border-radius: 6px;
-                            color: #52606d;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 8px;
+                            color: #64748b;
                         }
 
+                        /* ================================
+                           EMPTY STATE
+                           ================================ */
+
+                        .empty-state {
+                            padding: 25px;
+                            text-align: center;
+                            color: #64748b;
+                            background: #f8fafc;
+                            border-radius: 8px;
+                        }
+
+                        /* ================================
+                           RESPONSIVE DESIGN
+                           ================================ */
+
                         @media (max-width: 700px) {
+
                             .container {
-                                width: 96%;
-                                margin: 20px auto;
+                                width: 95%;
+                                margin: 20px auto 40px;
                             }
 
                             .header {
-                                padding: 20px;
+                                padding: 22px;
+                            }
+
+                            .header h1 {
+                                font-size: 24px;
+                            }
+
+                            .test-section {
+                                padding: 18px;
                             }
 
                             .test-card-header {
                                 flex-direction: column;
                                 align-items: flex-start;
                             }
+
+                            .section-heading {
+                                flex-direction: column;
+                                align-items: flex-start;
+                            }
                         }
+
                     </style>
                 </head>
 
@@ -381,7 +585,10 @@ public class HtmlReportGenerator {
 
         html.append("""
                 <section class="header">
-                    <h1>The Internet - Selenium Automation Execution Report</h1>
+                    <h1>
+                        The Internet - Selenium Automation
+                        Execution Report
+                    </h1>
                 """);
 
         html.append("<p><strong>Execution Date:</strong> ")
@@ -488,7 +695,15 @@ public class HtmlReportGenerator {
 
         html.append("""
                 <section class="test-section">
-                    <h2>Test Execution Details</h2>
+
+                    <div class="section-heading">
+                        <h2>Test Execution Details</h2>
+                    </div>
+
+                    <p class="section-description">
+                        Detailed results, execution findings, and
+                        final browser-state screenshots for each test.
+                    </p>
                 """);
 
         for (TestResult testResult : testResults) {
@@ -502,7 +717,9 @@ public class HtmlReportGenerator {
         if (testResults.isEmpty()) {
 
             html.append("""
-                    <p>No test results were recorded.</p>
+                    <div class="empty-state">
+                        No test results were recorded.
+                    </div>
                     """);
         }
 
@@ -524,6 +741,7 @@ public class HtmlReportGenerator {
 
         html.append("""
                 <div class="test-card">
+
                     <div class="test-card-header">
                 """);
 
@@ -543,7 +761,9 @@ public class HtmlReportGenerator {
 
         html.append("""
                     </div>
+
                     <div class="test-details">
+
                         <div class="detail-grid">
                 """);
 
@@ -583,6 +803,11 @@ public class HtmlReportGenerator {
                         </div>
                 """);
 
+        appendExecutionDetails(
+                html,
+                testResult
+        );
+
         appendFailureMessage(
                 html,
                 testResult
@@ -618,6 +843,150 @@ public class HtmlReportGenerator {
         html.append(escapeHtml(value));
 
         html.append("""
+                </div>
+                """);
+    }
+
+    /**
+     * Adds test-specific execution findings.
+     *
+     * This section is intentionally optional so that tests which do not
+     * produce additional findings do not display an empty panel.
+     */
+    private void appendExecutionDetails(
+            StringBuilder html,
+            TestResult testResult) {
+
+        String executionDetails =
+                testResult.getExecutionDetails();
+
+        if (executionDetails == null
+                || executionDetails.isBlank()) {
+
+            return;
+        }
+
+        String[] lines =
+                executionDetails.split("\\R");
+
+        if (lines.length == 0) {
+            return;
+        }
+
+        String analysisTitle =
+                lines[0];
+
+        String amount =
+                "";
+
+        StringBuilder users =
+                new StringBuilder();
+
+        boolean readingUsers =
+                false;
+
+        for (int index = 1;
+             index < lines.length;
+             index++) {
+
+            String line =
+                    lines[index].trim();
+
+            if (line.isBlank()) {
+                continue;
+            }
+
+            if ("MATCHING USERS:".equalsIgnoreCase(line)) {
+
+                readingUsers = true;
+                continue;
+            }
+
+            if (!readingUsers) {
+
+                if (amount.isBlank()) {
+                    amount = line;
+                }
+
+                continue;
+            }
+
+            if (line.startsWith("•")) {
+
+                String userName =
+                        line.substring(1).trim();
+
+                if (!userName.isBlank()) {
+
+                    users.append("""
+                            <div class="user-item">
+                                <span class="user-marker">✓</span>
+                            """);
+
+                    users.append(
+                            escapeHtml(userName)
+                    );
+
+                    users.append("""
+                            </div>
+                            """);
+                }
+            }
+        }
+
+        String heading =
+                analysisTitle.startsWith("HIGHEST")
+                        ? "Highest Due"
+                        : analysisTitle.startsWith("LOWEST")
+                        ? "Lowest Due"
+                        : "Execution Finding";
+
+        html.append("""
+                <div class="analysis">
+
+                    <div class="analysis-header">
+                        Test Analysis
+                    </div>
+
+                    <div class="analysis-body">
+
+                        <div class="analysis-title">
+                """);
+
+        html.append(
+                escapeHtml(heading)
+        );
+
+        html.append("""
+                        </div>
+                """);
+
+        if (!amount.isBlank()) {
+
+            html.append("<div class=\"analysis-amount\">")
+                    .append(escapeHtml(amount))
+                    .append("</div>");
+        }
+
+        if (users.length() > 0) {
+
+            html.append("""
+                        <div class="analysis-title">
+                            Matching Users
+                        </div>
+
+                        <div class="user-list">
+                    """);
+
+            html.append(users);
+
+            html.append("""
+                        </div>
+                    """);
+        }
+
+        html.append("""
+                    </div>
                 </div>
                 """);
     }
@@ -665,6 +1034,10 @@ public class HtmlReportGenerator {
 
         html.append("""
                 <div class="screenshot-container">
+
+                    <div class="screenshot-heading">
+                        Final Browser State
+                    </div>
                 """);
 
         if (screenshotBase64 == null
@@ -685,7 +1058,7 @@ public class HtmlReportGenerator {
             html.append(screenshotBase64);
 
             html.append("""
-                    " alt="Test execution screenshot">
+                    " alt="Final browser state screenshot">
                     """);
         }
 

@@ -1,3 +1,4 @@
+
 package com.theinternet.automation.tests;
 
 import com.theinternet.automation.base.BaseTest;
@@ -5,6 +6,7 @@ import com.theinternet.automation.pages.TablesPage;
 import com.theinternet.automation.utils.TableRow;
 import com.theinternet.automation.utils.TableUtils;
 import org.testng.Assert;
+import org.testng.Reporter;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -64,8 +66,12 @@ public class TablesTest extends BaseTest {
     }
 
     /**
-     * Verifies that the row with the highest Due amount
+     * Verifies that all rows containing the highest Due amount
      * can be identified dynamically.
+     *
+     * If multiple people have the same highest amount, every
+     * matching person is displayed and included in the execution
+     * details used by the HTML report.
      */
     @Test
     public void shouldFindPersonWithHighestDueAmount() {
@@ -77,31 +83,90 @@ public class TablesTest extends BaseTest {
         List<TableRow> rows =
                 tablesPage.getTableRows();
 
-        TableRow highestDue =
-                TableUtils.findHighestDue(rows);
+        List<TableRow> highestDueRows =
+                TableUtils.findRowsWithHighestDue(rows);
 
-        Assert.assertEquals(
-                highestDue.getFirstName(),
-                "Jason",
-                "Unexpected person associated with the highest Due amount."
+        Assert.assertFalse(
+                highestDueRows.isEmpty(),
+                "At least one row should contain the highest Due amount."
         );
 
-        Assert.assertEquals(
-                highestDue.getLastName(),
-                "Doe",
-                "Unexpected last name associated with the highest Due amount."
+        double highestDue =
+                highestDueRows.get(0).getDue();
+
+        StringBuilder executionDetails =
+                new StringBuilder();
+
+        executionDetails.append(
+                "HIGHEST DUE AMOUNT: $"
         );
 
+        executionDetails.append(
+                String.format(
+                        "%.2f",
+                        highestDue
+                )
+        );
+
+        executionDetails.append(
+                "\nMATCHING USERS:"
+        );
+
+        System.out.println();
+        System.out.println("==============================================");
+        System.out.println("[HIGHEST DUE]");
+        System.out.printf(
+                "Amount: $%.2f%n",
+                highestDue
+        );
+
+        for (TableRow row : highestDueRows) {
+
+            String fullName =
+                    row.getFirstName()
+                            + " "
+                            + row.getLastName();
+
+            executionDetails.append(
+                    "\n• "
+            ).append(
+                    fullName
+            );
+
+            System.out.println(
+                    "Person: "
+                            + fullName
+            );
+
+            Assert.assertEquals(
+                    row.getDue(),
+                    highestDue,
+                    "Every identified highest Due row should have the same amount."
+            );
+        }
+
+        Reporter.getCurrentTestResult().setAttribute(
+                "executionDetails",
+                executionDetails.toString()
+        );
+
+        System.out.println("==============================================");
+        System.out.println();
+
         Assert.assertEquals(
-                highestDue.getDue(),
+                highestDue,
                 100.00,
                 "Unexpected highest Due amount."
         );
     }
 
     /**
-     * Verifies that the row with the lowest Due amount
+     * Verifies that all rows containing the lowest Due amount
      * can be identified dynamically.
+     *
+     * If multiple people have the same lowest amount, every
+     * matching person is displayed and included in the execution
+     * details used by the HTML report.
      */
     @Test
     public void shouldFindPersonWithLowestDueAmount() {
@@ -113,11 +178,78 @@ public class TablesTest extends BaseTest {
         List<TableRow> rows =
                 tablesPage.getTableRows();
 
-        TableRow lowestDue =
-                TableUtils.findLowestDue(rows);
+        List<TableRow> lowestDueRows =
+                TableUtils.findRowsWithLowestDue(rows);
+
+        Assert.assertFalse(
+                lowestDueRows.isEmpty(),
+                "At least one row should contain the lowest Due amount."
+        );
+
+        double lowestDue =
+                lowestDueRows.get(0).getDue();
+
+        StringBuilder executionDetails =
+                new StringBuilder();
+
+        executionDetails.append(
+                "LOWEST DUE AMOUNT: $"
+        );
+
+        executionDetails.append(
+                String.format(
+                        "%.2f",
+                        lowestDue
+                )
+        );
+
+        executionDetails.append(
+                "\nMATCHING USERS:"
+        );
+
+        System.out.println();
+        System.out.println("==============================================");
+        System.out.println("[LOWEST DUE]");
+        System.out.printf(
+                "Amount: $%.2f%n",
+                lowestDue
+        );
+
+        for (TableRow row : lowestDueRows) {
+
+            String fullName =
+                    row.getFirstName()
+                            + " "
+                            + row.getLastName();
+
+            executionDetails.append(
+                    "\n• "
+            ).append(
+                    fullName
+            );
+
+            System.out.println(
+                    "Person: "
+                            + fullName
+            );
+
+            Assert.assertEquals(
+                    row.getDue(),
+                    lowestDue,
+                    "Every identified lowest Due row should have the same amount."
+            );
+        }
+
+        Reporter.getCurrentTestResult().setAttribute(
+                "executionDetails",
+                executionDetails.toString()
+        );
+
+        System.out.println("==============================================");
+        System.out.println();
 
         Assert.assertEquals(
-                lowestDue.getDue(),
+                lowestDue,
                 50.00,
                 "Unexpected lowest Due amount."
         );

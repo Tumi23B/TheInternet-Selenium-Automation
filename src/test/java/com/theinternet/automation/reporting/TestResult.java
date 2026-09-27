@@ -15,6 +15,7 @@ public class TestResult {
     private final String endTime;
     private final long durationMillis;
     private final String failureMessage;
+    private final String executionDetails;
     private final String screenshotBase64;
 
     public TestResult(
@@ -25,6 +26,7 @@ public class TestResult {
             String endTime,
             long durationMillis,
             String failureMessage,
+            String executionDetails,
             String screenshotBase64) {
 
         this.testClassName = testClassName;
@@ -34,6 +36,7 @@ public class TestResult {
         this.endTime = endTime;
         this.durationMillis = durationMillis;
         this.failureMessage = failureMessage;
+        this.executionDetails = executionDetails;
         this.screenshotBase64 = screenshotBase64;
     }
 
@@ -63,6 +66,10 @@ public class TestResult {
 
     public String getFailureMessage() {
         return failureMessage;
+    }
+
+    public String getExecutionDetails() {
+        return executionDetails;
     }
 
     public String getScreenshotBase64() {

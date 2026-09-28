@@ -1,3 +1,4 @@
+
 package com.theinternet.automation.reporting;
 
 import com.theinternet.automation.constants.FrameworkConstants;
@@ -166,26 +167,87 @@ public class HtmlReportGenerator {
 
                     <style>
 
+                        :root {
+                            --black: #050505;
+                            --black-soft: #0b0b0b;
+                            --surface: #111111;
+                            --surface-light: #171717;
+                            --surface-hover: #1c1c1c;
+
+                            --green: #00e676;
+                            --green-dark: #00b85c;
+                            --green-soft: rgba(0, 230, 118, 0.10);
+                            --green-border: rgba(0, 230, 118, 0.28);
+
+                            --white: #ffffff;
+                            --text: #f4f4f4;
+                            --text-muted: #a3a3a3;
+                            --text-dark-muted: #737373;
+
+                            --border: #292929;
+                            --border-light: #222222;
+
+                            --red: #ff5252;
+                            --red-soft: rgba(255, 82, 82, 0.10);
+                            --red-border: rgba(255, 82, 82, 0.30);
+
+                            --yellow: #ffc107;
+                            --yellow-soft: rgba(255, 193, 7, 0.10);
+                            --yellow-border: rgba(255, 193, 7, 0.30);
+
+                            --shadow:
+                                0 12px 35px rgba(0, 0, 0, 0.35);
+                        }
+
                         * {
                             box-sizing: border-box;
+                        }
+
+                        html {
+                            scroll-behavior: smooth;
                         }
 
                         body {
                             margin: 0;
                             padding: 0;
                             font-family:
+                                Inter,
+                                Segoe UI,
                                 Arial,
                                 Helvetica,
                                 sans-serif;
-                            background: #f1f5f9;
-                            color: #172033;
+                            background:
+                                radial-gradient(
+                                    circle at top right,
+                                    rgba(0, 230, 118, 0.055),
+                                    transparent 30%
+                                ),
+                                var(--black);
+                            color: var(--text);
                             line-height: 1.5;
+                        }
+
+                        body::before {
+                            content: "";
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            height: 3px;
+                            background:
+                                linear-gradient(
+                                    90deg,
+                                    var(--green),
+                                    var(--green-dark),
+                                    var(--green)
+                                );
+                            z-index: 9999;
                         }
 
                         .container {
                             width: 92%;
-                            max-width: 1450px;
-                            margin: 35px auto 60px;
+                            max-width: 1500px;
+                            margin: 45px auto 70px;
                         }
 
                         /* ================================
@@ -193,31 +255,176 @@ public class HtmlReportGenerator {
                            ================================ */
 
                         .header {
-                            background: #ffffff;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 14px;
-                            padding: 32px;
+                            position: relative;
+                            overflow: hidden;
+
+                            background:
+                                linear-gradient(
+                                    135deg,
+                                    #090909 0%,
+                                    #101010 55%,
+                                    #0b150f 100%
+                                );
+
+                            border: 1px solid var(--border);
+                            border-radius: 18px;
+                            padding: 36px;
                             margin-bottom: 24px;
+
+                            box-shadow: var(--shadow);
+                        }
+
+                        .header::after {
+                            content: "";
+                            position: absolute;
+                            width: 240px;
+                            height: 240px;
+                            right: -90px;
+                            top: -110px;
+
+                            background:
+                                radial-gradient(
+                                    circle,
+                                    rgba(0, 230, 118, 0.18),
+                                    transparent 68%
+                                );
+
+                            pointer-events: none;
+                        }
+
+                        .header-top {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: flex-start;
+                            gap: 25px;
+                            margin-bottom: 28px;
+                        }
+
+                        .brand {
+                            display: flex;
+                            align-items: center;
+                            gap: 15px;
+                        }
+
+                        .brand-icon {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            width: 48px;
+                            height: 48px;
+
+                            background: var(--green);
+                            color: var(--black);
+
+                            border-radius: 12px;
+
+                            font-size: 23px;
+                            font-weight: 900;
+
                             box-shadow:
-                                0 4px 16px
-                                rgba(15, 23, 42, 0.06);
+                                0 0 25px
+                                rgba(0, 230, 118, 0.20);
+                        }
+
+                        .brand-text {
+                            font-size: 12px;
+                            font-weight: 800;
+                            text-transform: uppercase;
+                            letter-spacing: 1.8px;
+                            color: var(--green);
+                        }
+
+                        .brand-subtext {
+                            margin-top: 2px;
+                            color: var(--text-dark-muted);
+                            font-size: 12px;
+                        }
+
+                        .execution-badge {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 8px;
+
+                            padding: 8px 13px;
+
+                            border: 1px solid var(--green-border);
+                            border-radius: 999px;
+
+                            background: var(--green-soft);
+                            color: var(--green);
+
+                            font-size: 11px;
+                            font-weight: 800;
+                            text-transform: uppercase;
+                            letter-spacing: 0.8px;
+                            white-space: nowrap;
+                        }
+
+                        .execution-dot {
+                            width: 7px;
+                            height: 7px;
+                            border-radius: 50%;
+                            background: var(--green);
+                            box-shadow:
+                                0 0 9px
+                                rgba(0, 230, 118, 0.85);
                         }
 
                         .header h1 {
-                            margin: 0 0 18px;
-                            font-size: 30px;
-                            line-height: 1.2;
-                            color: #0f172a;
+                            margin: 0 0 10px;
+
+                            font-size: clamp(26px, 4vw, 38px);
+                            line-height: 1.15;
+
+                            color: var(--white);
+                            letter-spacing: -0.7px;
                         }
 
-                        .header p {
-                            margin: 7px 0;
-                            color: #475569;
+                        .header-description {
+                            max-width: 780px;
+                            margin: 0 0 27px;
+
+                            color: var(--text-muted);
                             font-size: 14px;
                         }
 
-                        .header strong {
-                            color: #1e293b;
+                        .execution-info {
+                            display: grid;
+                            grid-template-columns:
+                                repeat(
+                                    auto-fit,
+                                    minmax(190px, 1fr)
+                                );
+                            gap: 12px;
+                        }
+
+                        .execution-info-item {
+                            padding: 14px 16px;
+
+                            background: rgba(255, 255, 255, 0.025);
+                            border: 1px solid var(--border);
+                            border-radius: 10px;
+                        }
+
+                        .execution-info-label {
+                            display: block;
+
+                            margin-bottom: 5px;
+
+                            color: var(--text-dark-muted);
+
+                            font-size: 10px;
+                            font-weight: 800;
+                            text-transform: uppercase;
+                            letter-spacing: 0.8px;
+                        }
+
+                        .execution-info-value {
+                            color: var(--text);
+                            font-size: 13px;
+                            font-weight: 600;
+                            word-break: break-word;
                         }
 
                         /* ================================
@@ -229,34 +436,79 @@ public class HtmlReportGenerator {
                             grid-template-columns:
                                 repeat(
                                     auto-fit,
-                                    minmax(180px, 1fr)
+                                    minmax(190px, 1fr)
                                 );
                             gap: 15px;
                             margin-bottom: 28px;
                         }
 
                         .summary-card {
-                            background: #ffffff;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 12px;
+                            position: relative;
+                            overflow: hidden;
+
+                            background: var(--surface);
+                            border: 1px solid var(--border);
+                            border-radius: 13px;
                             padding: 22px;
+
                             box-shadow:
-                                0 3px 12px
-                                rgba(15, 23, 42, 0.05);
+                                0 8px 25px
+                                rgba(0, 0, 0, 0.25);
+
+                            transition:
+                                transform 0.2s ease,
+                                border-color 0.2s ease;
+                        }
+
+                        .summary-card:hover {
+                            transform: translateY(-2px);
+                            border-color: var(--green-border);
+                        }
+
+                        .summary-card::before {
+                            content: "";
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            height: 2px;
+                            background: var(--green);
+                            opacity: 0.75;
                         }
 
                         .summary-card h3 {
-                            margin: 0 0 8px;
-                            font-size: 12px;
-                            color: #64748b;
+                            margin: 0 0 9px;
+
+                            font-size: 10px;
+                            font-weight: 800;
+
+                            color: var(--text-dark-muted);
+
                             text-transform: uppercase;
-                            letter-spacing: 0.7px;
+                            letter-spacing: 1px;
                         }
 
                         .summary-card .value {
-                            font-size: 29px;
-                            font-weight: 700;
-                            color: #0f172a;
+                            font-size: 31px;
+                            font-weight: 800;
+                            line-height: 1.1;
+                            color: var(--white);
+                        }
+
+                        .summary-card:nth-child(2) .value {
+                            color: var(--green);
+                        }
+
+                        .summary-card:nth-child(3) .value {
+                            color: var(--red);
+                        }
+
+                        .summary-card:nth-child(4) .value {
+                            color: var(--yellow);
+                        }
+
+                        .summary-card:nth-child(5) .value {
+                            color: var(--green);
                         }
 
                         /* ================================
@@ -264,14 +516,13 @@ public class HtmlReportGenerator {
                            ================================ */
 
                         .test-section {
-                            background: #ffffff;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 14px;
-                            padding: 26px;
+                            background: var(--surface);
+                            border: 1px solid var(--border);
+                            border-radius: 16px;
+                            padding: 28px;
                             margin-bottom: 22px;
-                            box-shadow:
-                                0 4px 16px
-                                rgba(15, 23, 42, 0.05);
+
+                            box-shadow: var(--shadow);
                         }
 
                         .section-heading {
@@ -279,19 +530,36 @@ public class HtmlReportGenerator {
                             justify-content: space-between;
                             align-items: center;
                             gap: 15px;
-                            margin-bottom: 10px;
+                            margin-bottom: 7px;
                         }
 
                         .section-heading h2 {
                             margin: 0;
-                            color: #0f172a;
+
+                            color: var(--white);
                             font-size: 21px;
+                            font-weight: 750;
+                        }
+
+                        .section-heading h2::before {
+                            content: "";
+                            display: inline-block;
+
+                            width: 4px;
+                            height: 20px;
+
+                            margin-right: 10px;
+                            vertical-align: -3px;
+
+                            background: var(--green);
+                            border-radius: 3px;
                         }
 
                         .section-description {
-                            margin: 0 0 18px;
-                            color: #64748b;
-                            font-size: 14px;
+                            margin: 0 0 20px;
+
+                            color: var(--text-muted);
+                            font-size: 13px;
                         }
 
                         /* ================================
@@ -299,17 +567,39 @@ public class HtmlReportGenerator {
                            ================================ */
 
                         .test-card {
-                            border: 1px solid #dbe3ec;
-                            border-radius: 11px;
-                            margin-top: 18px;
+                            border: 1px solid var(--border);
+                            border-radius: 12px;
+
+                            margin-top: 16px;
                             overflow: hidden;
-                            background: #ffffff;
+
+                            background: var(--black-soft);
+
+                            transition:
+                                border-color 0.2s ease,
+                                box-shadow 0.2s ease;
+                        }
+
+                        .test-card:hover {
+                            border-color: #383838;
+
+                            box-shadow:
+                                0 8px 28px
+                                rgba(0, 0, 0, 0.30);
                         }
 
                         .test-card-header {
-                            padding: 17px 20px;
-                            background: #f8fafc;
-                            border-bottom: 1px solid #e2e8f0;
+                            padding: 16px 19px;
+
+                            background:
+                                linear-gradient(
+                                    90deg,
+                                    #141414,
+                                    #101010
+                                );
+
+                            border-bottom: 1px solid var(--border);
+
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
@@ -317,9 +607,30 @@ public class HtmlReportGenerator {
                         }
 
                         .test-name {
+                            position: relative;
+
+                            padding-left: 13px;
+
                             font-weight: 700;
-                            color: #172033;
+                            font-size: 14px;
+
+                            color: var(--white);
+
                             word-break: break-word;
+                        }
+
+                        .test-name::before {
+                            content: "";
+
+                            position: absolute;
+                            left: 0;
+                            top: 4px;
+                            bottom: 4px;
+
+                            width: 3px;
+
+                            background: var(--green);
+                            border-radius: 3px;
                         }
 
                         /* ================================
@@ -327,28 +638,47 @@ public class HtmlReportGenerator {
                            ================================ */
 
                         .status {
-                            display: inline-block;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 6px;
+
                             padding: 6px 12px;
+
                             border-radius: 999px;
-                            font-size: 11px;
-                            font-weight: 700;
-                            letter-spacing: 0.5px;
+
+                            font-size: 10px;
+                            font-weight: 800;
+
+                            letter-spacing: 0.8px;
+                            text-transform: uppercase;
+
                             white-space: nowrap;
                         }
 
+                        .status::before {
+                            content: "";
+                            width: 6px;
+                            height: 6px;
+                            border-radius: 50%;
+                            background: currentColor;
+                        }
+
                         .passed {
-                            background: #dcfce7;
-                            color: #166534;
+                            background: var(--green-soft);
+                            color: var(--green);
+                            border: 1px solid var(--green-border);
                         }
 
                         .failed {
-                            background: #fee2e2;
-                            color: #991b1b;
+                            background: var(--red-soft);
+                            color: var(--red);
+                            border: 1px solid var(--red-border);
                         }
 
                         .skipped {
-                            background: #fef3c7;
-                            color: #92400e;
+                            background: var(--yellow-soft);
+                            color: var(--yellow);
+                            border: 1px solid var(--yellow-border);
                         }
 
                         /* ================================
@@ -361,30 +691,45 @@ public class HtmlReportGenerator {
 
                         .detail-grid {
                             display: grid;
+
                             grid-template-columns:
                                 repeat(
                                     auto-fit,
                                     minmax(210px, 1fr)
                                 );
-                            gap: 12px;
+
+                            gap: 10px;
                             margin-bottom: 20px;
                         }
 
                         .detail-item {
-                            background: #f8fafc;
-                            border: 1px solid #e2e8f0;
+                            background: #0d0d0d;
+
+                            border: 1px solid var(--border);
                             padding: 13px;
-                            border-radius: 8px;
+
+                            border-radius: 9px;
+
+                            color: #dddddd;
+
+                            font-size: 13px;
+                            font-weight: 600;
+
+                            word-break: break-word;
                         }
 
                         .detail-label {
                             display: block;
-                            font-size: 11px;
-                            color: #64748b;
-                            margin-bottom: 4px;
-                            font-weight: 700;
+
+                            font-size: 9px;
+                            color: var(--text-dark-muted);
+
+                            margin-bottom: 5px;
+
+                            font-weight: 800;
+
                             text-transform: uppercase;
-                            letter-spacing: 0.4px;
+                            letter-spacing: 0.8px;
                         }
 
                         /* ================================
@@ -393,19 +738,35 @@ public class HtmlReportGenerator {
 
                         .analysis {
                             margin: 20px 0;
-                            border: 1px solid #bfdbfe;
+
+                            border: 1px solid var(--green-border);
                             border-radius: 10px;
-                            background: #eff6ff;
+
+                            background:
+                                linear-gradient(
+                                    135deg,
+                                    rgba(0, 230, 118, 0.07),
+                                    rgba(0, 230, 118, 0.025)
+                                );
+
                             overflow: hidden;
                         }
 
                         .analysis-header {
-                            padding: 14px 17px;
-                            background: #dbeafe;
-                            border-bottom: 1px solid #bfdbfe;
-                            font-weight: 700;
-                            color: #1e3a8a;
-                            font-size: 14px;
+                            padding: 13px 17px;
+
+                            background:
+                                rgba(0, 230, 118, 0.08);
+
+                            border-bottom: 1px solid var(--green-border);
+
+                            font-weight: 800;
+                            color: var(--green);
+
+                            font-size: 12px;
+
+                            text-transform: uppercase;
+                            letter-spacing: 0.7px;
                         }
 
                         .analysis-body {
@@ -414,19 +775,25 @@ public class HtmlReportGenerator {
 
                         .analysis-title {
                             margin: 0 0 8px;
-                            font-size: 12px;
-                            font-weight: 700;
-                            color: #475569;
+
+                            font-size: 10px;
+                            font-weight: 800;
+
+                            color: var(--text-muted);
+
                             text-transform: uppercase;
-                            letter-spacing: 0.5px;
+                            letter-spacing: 0.7px;
                         }
 
                         .analysis-amount {
                             display: inline-block;
+
                             margin-bottom: 16px;
-                            font-size: 25px;
-                            font-weight: 700;
-                            color: #0f172a;
+
+                            font-size: 27px;
+                            font-weight: 800;
+
+                            color: var(--green);
                         }
 
                         .user-list {
@@ -439,25 +806,36 @@ public class HtmlReportGenerator {
                             display: flex;
                             align-items: center;
                             gap: 10px;
+
                             padding: 10px 12px;
-                            background: #ffffff;
-                            border: 1px solid #dbeafe;
+
+                            background: #0c0c0c;
+
+                            border: 1px solid var(--border);
                             border-radius: 8px;
+
                             font-weight: 600;
-                            color: #1e293b;
+                            font-size: 13px;
+
+                            color: #dddddd;
                         }
 
                         .user-marker {
                             display: inline-flex;
                             align-items: center;
                             justify-content: center;
+
                             width: 25px;
                             height: 25px;
+
                             border-radius: 50%;
-                            background: #2563eb;
-                            color: #ffffff;
+
+                            background: var(--green);
+                            color: var(--black);
+
                             font-size: 12px;
-                            font-weight: 700;
+                            font-weight: 900;
+
                             flex-shrink: 0;
                         }
 
@@ -466,25 +844,45 @@ public class HtmlReportGenerator {
                            ================================ */
 
                         .failure {
-                            background: #fff5f5;
-                            border: 1px solid #fecaca;
+                            background: var(--red-soft);
+
+                            border: 1px solid var(--red-border);
+                            border-left: 4px solid var(--red);
+
                             border-radius: 9px;
+
                             padding: 16px;
+
                             margin-bottom: 20px;
                         }
 
                         .failure strong {
                             display: block;
-                            margin-bottom: 8px;
-                            color: #991b1b;
+
+                            margin-bottom: 9px;
+
+                            color: var(--red);
+
+                            font-size: 11px;
+                            font-weight: 800;
+
+                            text-transform: uppercase;
+                            letter-spacing: 0.8px;
                         }
 
                         .failure-message {
                             white-space: pre-wrap;
                             word-break: break-word;
-                            font-family: Consolas, monospace;
-                            font-size: 13px;
-                            color: #7f1d1d;
+
+                            font-family:
+                                Consolas,
+                                "Courier New",
+                                monospace;
+
+                            font-size: 12px;
+                            line-height: 1.6;
+
+                            color: #ffb3b3;
                         }
 
                         /* ================================
@@ -496,30 +894,64 @@ public class HtmlReportGenerator {
                         }
 
                         .screenshot-heading {
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+
                             margin-bottom: 10px;
+
+                            font-size: 11px;
+                            font-weight: 800;
+
+                            color: var(--text-muted);
+
+                            text-transform: uppercase;
+                            letter-spacing: 0.7px;
+                        }
+
+                        .screenshot-heading::before {
+                            content: "▣";
+
+                            color: var(--green);
                             font-size: 13px;
-                            font-weight: 700;
-                            color: #475569;
                         }
 
                         .screenshot-container img {
                             display: block;
+
                             width: 100%;
-                            max-width: 1100px;
+                            max-width: 1150px;
                             height: auto;
-                            border: 1px solid #cbd5e1;
-                            border-radius: 9px;
+
+                            border: 1px solid var(--border);
+                            border-radius: 10px;
+
+                            background: #000000;
+
                             box-shadow:
-                                0 3px 10px
-                                rgba(15, 23, 42, 0.06);
+                                0 8px 30px
+                                rgba(0, 0, 0, 0.45);
+
+                            transition:
+                                border-color 0.2s ease,
+                                transform 0.2s ease;
+                        }
+
+                        .screenshot-container img:hover {
+                            border-color: var(--green-border);
                         }
 
                         .no-screenshot {
                             padding: 15px;
-                            background: #f8fafc;
-                            border: 1px solid #e2e8f0;
+
+                            background: #0d0d0d;
+
+                            border: 1px dashed #333333;
                             border-radius: 8px;
-                            color: #64748b;
+
+                            color: var(--text-dark-muted);
+
+                            font-size: 12px;
                         }
 
                         /* ================================
@@ -527,11 +959,40 @@ public class HtmlReportGenerator {
                            ================================ */
 
                         .empty-state {
-                            padding: 25px;
+                            padding: 35px 25px;
+
                             text-align: center;
-                            color: #64748b;
-                            background: #f8fafc;
-                            border-radius: 8px;
+
+                            color: var(--text-muted);
+
+                            background: #0d0d0d;
+
+                            border: 1px dashed #333333;
+                            border-radius: 10px;
+
+                            font-size: 13px;
+                        }
+
+                        /* ================================
+                           SCROLLBAR
+                           ================================ */
+
+                        ::-webkit-scrollbar {
+                            width: 9px;
+                            height: 9px;
+                        }
+
+                        ::-webkit-scrollbar-track {
+                            background: #080808;
+                        }
+
+                        ::-webkit-scrollbar-thumb {
+                            background: #303030;
+                            border-radius: 10px;
+                        }
+
+                        ::-webkit-scrollbar-thumb:hover {
+                            background: var(--green-dark);
                         }
 
                         /* ================================
@@ -541,16 +1002,22 @@ public class HtmlReportGenerator {
                         @media (max-width: 700px) {
 
                             .container {
-                                width: 95%;
-                                margin: 20px auto 40px;
+                                width: 94%;
+                                margin: 30px auto 45px;
                             }
 
                             .header {
-                                padding: 22px;
+                                padding: 24px;
+                                border-radius: 14px;
+                            }
+
+                            .header-top {
+                                flex-direction: column;
+                                align-items: flex-start;
                             }
 
                             .header h1 {
-                                font-size: 24px;
+                                font-size: 26px;
                             }
 
                             .test-section {
@@ -565,6 +1032,36 @@ public class HtmlReportGenerator {
                             .section-heading {
                                 flex-direction: column;
                                 align-items: flex-start;
+                            }
+
+                            .summary-grid {
+                                grid-template-columns:
+                                    repeat(2, 1fr);
+                            }
+
+                            .execution-info {
+                                grid-template-columns: 1fr;
+                            }
+                        }
+
+                        @media (max-width: 450px) {
+
+                            .summary-grid {
+                                grid-template-columns: 1fr;
+                            }
+
+                            .brand {
+                                align-items: flex-start;
+                            }
+
+                            .brand-icon {
+                                width: 42px;
+                                height: 42px;
+                                font-size: 20px;
+                            }
+
+                            .test-details {
+                                padding: 15px;
                             }
                         }
 
@@ -585,29 +1082,92 @@ public class HtmlReportGenerator {
 
         html.append("""
                 <section class="header">
+
+                    <div class="header-top">
+
+                        <div class="brand">
+
+                            <div class="brand-icon">
+                                ✓
+                            </div>
+
+                            <div>
+                                <div class="brand-text">
+                                    Selenium Automation
+                                </div>
+
+                                <div class="brand-subtext">
+                                    Automated Quality Assurance Report
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="execution-badge">
+                            <span class="execution-dot"></span>
+                            Execution Complete
+                        </div>
+
+                    </div>
+
                     <h1>
                         The Internet - Selenium Automation
-                        Execution Report
                     </h1>
+
+                    <p class="header-description">
+                        Comprehensive automated test execution results,
+                        execution findings, failure diagnostics, and
+                        final browser-state evidence.
+                    </p>
+
+                    <div class="execution-info">
+
+                        <div class="execution-info-item">
+                            <span class="execution-info-label">
+                                Execution Date
+                            </span>
                 """);
 
-        html.append("<p><strong>Execution Date:</strong> ")
+        html.append("<div class=\"execution-info-value\">")
                 .append(escapeHtml(summary.getExecutionDate()))
-                .append("</p>");
-
-        html.append("<p><strong>Start Time:</strong> ")
-                .append(escapeHtml(summary.getStartTime()))
-                .append("</p>");
-
-        html.append("<p><strong>End Time:</strong> ")
-                .append(escapeHtml(summary.getEndTime()))
-                .append("</p>");
-
-        html.append("<p><strong>Total Duration:</strong> ")
-                .append(formatDuration(summary.getDurationMillis()))
-                .append("</p>");
+                .append("</div></div>");
 
         html.append("""
+                        <div class="execution-info-item">
+                            <span class="execution-info-label">
+                                Start Time
+                            </span>
+                """);
+
+        html.append("<div class=\"execution-info-value\">")
+                .append(escapeHtml(summary.getStartTime()))
+                .append("</div></div>");
+
+        html.append("""
+                        <div class="execution-info-item">
+                            <span class="execution-info-label">
+                                End Time
+                            </span>
+                """);
+
+        html.append("<div class=\"execution-info-value\">")
+                .append(escapeHtml(summary.getEndTime()))
+                .append("</div></div>");
+
+        html.append("""
+                        <div class="execution-info-item">
+                            <span class="execution-info-label">
+                                Total Duration
+                            </span>
+                """);
+
+        html.append("<div class=\"execution-info-value\">")
+                .append(formatDuration(summary.getDurationMillis()))
+                .append("</div></div>");
+
+        html.append("""
+                    </div>
+
                 </section>
                 """);
     }
